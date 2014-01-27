@@ -1,0 +1,112 @@
+<?php
+  /**
+  * @file
+  * A module that allows comments to be moderated remotely.
+  */
+
+
+ /**
+  * Implements hook_menu().
+  */
+  function fluff_moderator_menu() {    
+    $items['fluff_moderator'] = array(
+    'title' => 'Fluff Moderator!', 
+    'page callback' => 'fluff_moderator_operations', 
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+        
+    return $items;
+  }
+    
+  /**
+   * Gets, approves, edits and deletes comments, and returns module version number
+   *
+   * @access public
+   * @author Chris Bestwick
+   * @param string $operation
+   * @param integer $id
+   * @param string $comment_content
+   */
+  function fluff_moderator_operations() { 
+    
+//  instantiate a moderator object
+    $fluff_moderator = new DrFluffModerator();  
+      
+    switch ($fluff_moderator->operation) {
+        
+      case 'setup':
+        $setup = $fluff_moderator->fluffSetup();
+        print $fluff_moderator->fluffEncode($setup);
+        exit;
+        
+      case 'digest':
+        $digest_data = $fluff_moderator->fluffDigest();
+        print $fluff_moderator->fluffEncode($digest_data);
+        exit;
+        
+      case 'poll':
+//      authenticate first
+        $response = $fluff_moderator->fluffAuthenticate();                
+        if ( true === $response ) 
+        {
+//        if the request is authentic, poll                    
+          $response = $fluff_moderator->fluffPoll();    
+        }
+//      print the results of the poll, or any error                
+        print $fluff_moderator->fluffEncode($response);
+        exit;  
+
+      case 'approve':
+//      authenticate first
+        $response = $fluff_moderator->fluffAuthenticate();                
+        if ( true === $response ) 
+        {
+//        if the request is authentic, approve                    
+          $response = $fluff_moderator->fluffApprove();    
+        }
+//      print the results of the approve method, or any error                
+        print $fluff_moderator->fluffEncode($response);
+        exit;
+                
+      case 'delete':
+//      authenticate first
+        $response = $fluff_moderator->fluffAuthenticate();                
+        if ( true === $response ) 
+        {
+//        if the request is authentic, delete                    
+          $response = $fluff_moderator->fluffDelete();    
+        }
+//      print the results of the delete method, or any error                
+        print $fluff_moderator->fluffEncode($response);
+        exit;
+                
+      case 'edit':
+//      authenticate first
+        $response = $fluff_moderator->fluffAuthenticate();                
+        if ( true === $response ) 
+        {
+//        if the request is authentic, edit                    
+          $response = $fluff_moderator->fluffEdit();    
+        }
+//      print the results of the edit method, or any error                
+        print $fluff_moderator->fluffEncode($response);
+        exit;
+        
+      case 'version':
+//      authenticate first
+        $response = $fluff_moderator->fluffAuthenticate();                
+        if ( true === $response ) 
+        {
+//        if the request is authentic, get the version                    
+          $response = $fluff_moderator->fluffVersion();    
+        }
+//      print the results of the version method, or any error                
+        print $fluff_moderator->fluffEncode($response);
+        exit;
+    }
+  }
+    
+   
+    
+    
