@@ -1,0 +1,9 @@
+name = fluff moderator
+description = Remotely moderate comments
+core = 7.x
+ 
+files[] = fluff_moderator.module
+files[] = FluffModeratorInterface.inc
+files[] = DrFluffModerator.inc
+files[] = ForceUTF8\Encoding.inc
+dependencies[] = comment
